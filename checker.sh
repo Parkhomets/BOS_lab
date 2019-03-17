@@ -23,6 +23,7 @@ function checkUser {
 	user=$( find $FILE -printf '%u\n' )
 	if [ "$user" != "$USER"  ]
 	then
+	 Log "ERROR: Expected $USER Got $user for $FILE"
 	 chown $USER $FILE
 	fi
 }
@@ -32,6 +33,7 @@ function checkGroup {
 	if [ "$group" != "$GROUP" ]
 	then
 	 chgrp $GROUP $FILE
+	 Log "ERROR: Expected $GROUP Got $group for $FILE"
 	fi
 }
 
@@ -61,6 +63,7 @@ trap "onexit" EXIT
 
 while true
 do
+    Log "Start service"
     wait && MainCheck
     sleep $timeout &
 done
