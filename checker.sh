@@ -1,19 +1,48 @@
 #!/bin/bash
 
-function getmod {		#преобразует буквенное представление прав в цифрыш
-L=$1
-i=`expr index "$L" "r"`
-j=`expr index "$L" "w"`
-k=`expr index "$L" "x"`
-let "i=i*4+j+k/3"
-echo "$i"
+CONF=config.conf
+IFS=":"
+timeout=5
+logFile="lab.log"
+
+
+function Log {
+    eventTime=$( date )
+    echo "[" $eventTime "] " $1 # >> logFile
 }
 
+function checkPaermission {
+    realPerm=$( find $FILE -printf '%m' )
+    if [[ $realPerm != $REST ]]
+    then
+        Log "ERROR: Expected $REST Got $realPerm for $FILE"
+        chmod $REST $FILE
+    fi
+}
 
-CONF=config.conf
+function MainCheck {
+    Log "begin scan"
+    while read FILE REST USER GROUP
+    do
+        checkPaermission $FILE $REST
+        #
+        # TODO: add other checks
+        #
+    done < $CONF
+    Log "scan finished"
+    # Log "PID=$$"
+}
 
-IFS=":"
-while read FILE REST USER GROUP
-     do echo $FILE
-	chmod $(getmod ${REST:1:3})$(getmod ${REST:4:3})$(getmod ${REST:7:3}) $FILE
-done < $CONF
+function CheckBySignal {
+    Log "SIGUSR1"
+    MainCheck
+}
+
+trap "CheckBySignal" SIGUSR1
+
+while true
+do
+    wait && MainCheck
+    sleep $timeout &
+done
+
