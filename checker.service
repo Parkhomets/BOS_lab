@@ -1,0 +1,13 @@
+[Unit]
+Description=Permission check and recovery
+
+[Service]
+Type=simple
+PIDFile=/opt/checker/service.pid
+User=root
+Group=root
+Restart=always
+ExecStart=/opt/checker/checker.sh
+
+[Install]
+WantedBy=multi-user.target
