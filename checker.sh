@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONF=config.conf
+CONF=checker.conf
 IFS=":"
 timeout=60
 logFile="lab.log"
