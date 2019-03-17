@@ -52,7 +52,12 @@ function CheckBySignal {
     MainCheck
 }
 
+function onexit {
+    Log "Exit"
+}
+
 trap "CheckBySignal" SIGUSR1
+trap "onexit" EXIT
 
 while true
 do
