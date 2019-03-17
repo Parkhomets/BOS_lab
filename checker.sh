@@ -20,14 +20,29 @@ function checkPaermission {
     fi
 }
 
+function checkUser {
+	user=$( find $FILE -printf '%u\n' )
+	if [ "$user" != "$USER"  ]
+	then
+	 chown $USER $FILE
+	fi
+}
+
+function checkGroup {
+	group=$( find $FILE -printf '%g\n' )
+	if [ "$group" != "$GROUP" ]
+	then
+	 chgrp $GROUP $FILE
+	fi
+}
+
 function MainCheck {
     Log "begin scan"
     while read FILE REST USER GROUP
     do
         checkPaermission $FILE $REST
-        #
-        # TODO: add other checks
-        #
+        checkUser $FILE $USER
+	checkGroup $FILE $GROUP
     done < $CONF
     Log "scan finished"
     # Log "PID=$$"
