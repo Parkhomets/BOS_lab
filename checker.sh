@@ -2,14 +2,13 @@
 
 CONF=config.conf
 IFS=":"
-timeout=5
+timeout=60
 logFile="lab.log"
 
 
 function Log {
-    eventTime=$( date )
-    echo "[" $eventTime "] " $1 # >> logFile
-}
+	systemd-cat echo $1
+    }
 
 function checkPaermission {
     realPerm=$( find $FILE -printf '%m' )
@@ -37,14 +36,14 @@ function checkGroup {
 }
 
 function MainCheck {
-    Log "begin scan"
+    Log "Scanning is beginning"
     while read FILE REST USER GROUP
     do
         checkPaermission $FILE $REST
         checkUser $FILE $USER
 	checkGroup $FILE $GROUP
     done < $CONF
-    Log "scan finished"
+    Log "Scanning is successfully complited"
     # Log "PID=$$"
 }
 
