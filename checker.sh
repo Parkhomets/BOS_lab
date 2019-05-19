@@ -1,10 +1,12 @@
 #!/bin/bash
 
-CONF=checker.conf
+CONF=/opt/checker/checker.conf
 IFS=":"
 timeout=60
 logFile="lab.log"
+pidFile=/opt/checker/checker.pid
 
+echo $$ > $pidFile
 
 function Log {
 	systemd-cat echo $1
