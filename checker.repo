@@ -1,0 +1,5 @@
+[checker_repo]
+name=checker_repo
+baseurl=http://centos.gremlinlab.com/gremlin_repo
+enabled=1
+gpgkey=http://centos.gremlinlab.com/gremlin_repo/RPM-GPG-KEY-Pavel-Parkhomets
