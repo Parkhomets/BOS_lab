@@ -1,0 +1,125 @@
+module checker 1.0.0;
+
+require {
+  	type unconfined_t;
+	role unconfined_r;
+	type init_t;	
+	class process transition;
+
+	type var_run_t;
+	type proc_t;
+	type locale_t;	
+	type home_root_t;
+	type var_t;
+	type selinux_config_t;
+	type device_t;
+	type passwd_file_t;
+	type root_t;
+	type user_devpts_t;
+	type bin_t;
+	type unlabeled_t;
+	type ksmtuned_t;
+	type setroubleshootd_t;
+
+	class capability net_admin;
+	class lnk_file read;
+	class chr_file ioctl;
+	class dir search;
+	class process { fork sigchld signal };
+	class fd use;
+	class unix_stream_socket getattr;
+	class file { execute getattr setattr read };
+}
+
+type checker_t;
+type checker_exec_t;
+type checker_conf_t;
+
+role unconfined_r types checker_t ;
+
+type_transition unconfined_t checker_exec_t : process checker_t;
+type_transition init_t checker_exec_t : process checker_t;
+
+#============= checker_t ==============
+
+#!!!! WARNING: 'bin_t' is a base type.
+allow checker_t bin_t:lnk_file read;
+
+#!!!! WARNING: 'device_t' is a base type.
+allow checker_t device_t:dir search;
+
+#!!!! WARNING: 'home_root_t' is a base type.
+allow checker_t home_root_t:dir search;
+allow checker_t locale_t:dir search;
+allow checker_t proc_t:dir search;
+
+#!!!! This avc is allowed in the current policy
+allow checker_t root_t:dir search;
+allow checker_t selinux_config_t:dir search;
+allow checker_t user_devpts_t:chr_file ioctl;
+
+#!!!! WARNING: 'var_run_t' is a base type.
+allow checker_t var_run_t:dir search;
+
+#!!!! WARNING: 'var_t' is a base type.
+allow checker_t var_t:dir search;
+
+#!!!! This avc is allowed in the current policy
+allow checker_t bin_t:lnk_file read;
+
+#!!!! This avc is allowed in the current policy
+allow checker_t device_t:dir search;
+
+#!!!! This avc is allowed in the current policy
+allow checker_t home_root_t:dir search;
+
+#!!!! This avc is allowed in the current policy
+allow checker_t locale_t:dir search;
+allow checker_t passwd_file_t:file setattr;
+
+#!!!! This avc is allowed in the current policy
+allow checker_t proc_t:dir search;
+
+#!!!! This avc is allowed in the current policy
+allow checker_t root_t:dir search;
+allow checker_t self:capability net_admin;
+
+#!!!! This avc is allowed in the current policy
+allow checker_t selinux_config_t:dir search;
+
+#!!!! This avc is allowed in the current policy
+allow checker_t user_devpts_t:chr_file ioctl;
+
+#!!!! This avc is allowed in the current policy
+allow checker_t var_run_t:dir search;
+
+#!!!! This avc is allowed in the current policy
+allow checker_t var_t:dir search;
+
+
+#============= init_t ==============
+allow init_t checker_exec_t:file execute;
+
+#============= ksmtuned_t ==============
+
+#!!!! WARNING: 'unlabeled_t' is a base type.
+allow ksmtuned_t unlabeled_t:file read;
+
+#============= setroubleshootd_t ==============
+allow setroubleshootd_t checker_conf_t:file getattr;
+allow setroubleshootd_t checker_exec_t:file getattr;
+
+#============= unconfined_t ==============
+allow unconfined_t checker_conf_t:file getattr;
+allow unconfined_t checker_exec_t:file getattr;
+
+#============= unlabeled_t ==============
+allow unlabeled_t init_t:fd use;
+allow unlabeled_t init_t:unix_stream_socket getattr;
+
+#!!!! WARNING: 'root_t' is a base type.
+allow unlabeled_t root_t:dir search;
+
+#!!!! WARNING: 'unlabeled_t' is a base type.
+allow unlabeled_t self:process { fork sigchld signal };
+

@@ -1,0 +1,4 @@
+# исполняемый файл
+/opt/checker/checker.sh		--	gen_context(system_u:object_r:checker_exec_t)
+# все что r/o для сервиса назовем "конфигом"
+/opt/checker/checker.conf		gen_context(system_u:object_r:checker_conf_t)
